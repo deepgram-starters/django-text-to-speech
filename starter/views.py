@@ -24,9 +24,12 @@ def synthesize(request):
             return JsonResponse({"error": "Text required"}, status=400)
         
         model = request.POST.get('model', 'aura-asteria-en')
-        options = {"text": text}
-        response = deepgram.speak.rest.v("1").stream_raw(options, {"model": model})
-        audio_data = b"".join(response.stream)
+
+        audio_generator = deepgram.speak.v1.audio.generate(
+            text=text,
+            model=model
+        )
+        audio_data = b"".join(audio_generator)
         
         return HttpResponse(audio_data, content_type="audio/mpeg")
     except Exception as e:
