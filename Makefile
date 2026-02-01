@@ -1,4 +1,4 @@
-.PHONY: help init dev build start update clean
+.PHONY: help init dev build start update clean status
 
 help:
 	@echo "Available commands:"
@@ -8,6 +8,7 @@ help:
 	@echo "  make start    - Start production server"
 	@echo "  make update   - Update submodules to latest"
 	@echo "  make clean    - Remove venv, node_modules and build artifacts"
+	@echo "  make status   - Show git and submodule status"
 
 init:
 	@echo "Initializing submodules..."
@@ -22,7 +23,7 @@ init:
 
 dev:
 	@echo "Starting development server..."
-	./venv/bin/python manage.py runserver 8080
+	./venv/bin/daphne -b 0.0.0.0 -p 8080 config.asgi:application
 
 build:
 	@echo "Building frontend for production..."
@@ -31,7 +32,7 @@ build:
 
 start:
 	@echo "Starting production server..."
-	./venv/bin/python manage.py runserver 8080
+	./venv/bin/daphne -b 0.0.0.0 -p 8080 config.asgi:application
 
 update:
 	@echo "Updating submodules..."
@@ -47,3 +48,9 @@ clean:
 	rm -rf */__pycache__/
 	rm -rf */*/__pycache__/
 	@echo "Clean complete!"
+
+status:
+	@echo "Git status:"
+	@git status --short
+	@echo "\nSubmodule status:"
+	@git submodule status

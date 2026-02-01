@@ -24,9 +24,11 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
+    'daphne',  # Must be first for Channels
     'django.contrib.staticfiles',
     'corsheaders',
     'starter',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
 
 # No database needed for API proxy
 DATABASES = {}
@@ -65,8 +68,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/assets/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'frontend' / 'dist' / 'assets']
+STATIC_ROOT = BASE_DIR / 'frontend' / 'dist' / 'assets'
+STATICFILES_DIRS = [BASE_DIR / 'frontend' / 'dist']
 
 # Media files
 MEDIA_URL = '/media/'
