@@ -40,6 +40,18 @@ def synthesize(request):
         return HttpResponse(audio_data, content_type="audio/mpeg")
     except Exception as e:
         print(f"TTS Error: {e}")
+        error_msg = str(e).lower()
+
+        # Check if it's a Deepgram text length error
+        if any(keyword in error_msg for keyword in ['too long', 'length', 'limit', 'exceed']):
+            return JsonResponse({
+                "error": {
+                    "type": "ValidationError",
+                    "code": "TEXT_TOO_LONG",
+                    "message": "Text exceeds maximum allowed length"
+                }
+            }, status=400)
+
         return JsonResponse({
             "error": {
                 "type": "SynthesisError",
