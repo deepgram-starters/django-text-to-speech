@@ -21,7 +21,13 @@ def synthesize(request):
         body = json.loads(request.body)
         text = body.get('text')
         if not text or not text.strip():
-            return JsonResponse({"error": "Text required"}, status=400)
+            return JsonResponse({
+                "error": {
+                    "type": "ValidationError",
+                    "code": "INVALID_INPUT",
+                    "message": "Text required"
+                }
+            }, status=400)
         
         model = request.POST.get('model', 'aura-asteria-en')
 
@@ -34,7 +40,13 @@ def synthesize(request):
         return HttpResponse(audio_data, content_type="audio/mpeg")
     except Exception as e:
         print(f"TTS Error: {e}")
-        return JsonResponse({"error": "TTS synthesis failed"}, status=500)
+        return JsonResponse({
+            "error": {
+                "type": "SynthesisError",
+                "code": "SYNTHESIS_FAILED",
+                "message": str(e)
+            }
+        }, status=500)
 
 @require_http_methods(["GET"])
 def metadata(request):
@@ -43,4 +55,10 @@ def metadata(request):
         with open('deepgram.toml', 'r') as f:
             return JsonResponse(toml.load(f).get('meta', {}))
     except:
-        return JsonResponse({'error': 'Failed'}, status=500)
+        return JsonResponse({
+            "error": {
+                "type": "MetadataError",
+                "code": "METADATA_FAILED",
+                "message": "Failed to read metadata"
+            }
+        }, status=500)
