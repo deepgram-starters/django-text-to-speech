@@ -16,7 +16,7 @@ deepgram = DeepgramClient(api_key=API_KEY)
 @csrf_exempt
 @require_http_methods(["POST"])
 def synthesize(request):
-    """POST /tts/synthesize"""
+    """POST /api/text-to-speech"""
     try:
         body = json.loads(request.body)
         text = body.get('text')
