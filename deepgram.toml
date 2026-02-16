@@ -6,7 +6,7 @@ repository = "https://github.com/deepgram-starters/django-text-to-speech"
 useCase = "text-to-speech"
 language = "python"
 framework = "django"
-sdk = "5.3.2"
+sdk = "6.0.0-rc.1"
 tags = ["text-to-speech", "tts", "speech-synthesis", "python", "django"]
 
 # Check prerequisites
